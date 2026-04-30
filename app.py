@@ -3,7 +3,6 @@ from groq import Groq
  
 st.title("Summarize")
 st.write("اكتب النص الذي تريده")
- 
 client = Groq(api_key=st.secrets["GROQ_API_KEY"])
  
 text = st.text_area("اكتب النص هنا...", height=200)
