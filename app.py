@@ -1,21 +1,23 @@
 import streamlit as st
-from transformers import pipeline
+from groq import Groq
  
 st.title("Summarize")
-
-#يحمل النموذج مره واحده فقط
-@st.cache_resource
-def load_model():
-    return pipeline("text2text-generation", model="marefa-nlp/summarization-arabic-english-news")
+st.write("اكتب النص الذي تريده")
  
-summarizer = load_model()
+client = Groq(api_key=st.secrets["GROQ_API_KEY"])
  
 text = st.text_area("اكتب النص هنا...", height=200)
  
 if st.button(" لخّص!"):
-    if len(text.split()) < 30:
-        st.warning("النص قصير جداً! اكتب 30 كلمة على الأقل.")
+    if len(text.split()) < 20:
+        st.warning("النص قصير جداً!")
     else:
         with st.spinner("جاري التلخيص..."):
-            result = summarizer(text, max_length=120, min_length=30, do_sample=False)
-            st.success(result[0]["generated_text"])
+            response = client.chat.completions.create(
+                model="llama3-8b-8192",
+                messages=[
+                    {"role": "system", "content": "أنت مساعد للأطفال. لخّص النص في 3-4 جمل بسيطة بنفس لغة النص."},
+                    {"role": "user", "content": text}
+                ]
+            )
+            st.success(response.choices[0].message.content)
