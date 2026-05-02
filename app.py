@@ -13,7 +13,7 @@ if st.button(" لخّص!"):
     else:
         with st.spinner("⏳ جاري التلخيص..."):
             response = client.chat.completions.create(
-                model="llama3-8b-8192",
+                model="llama-3.3-70b-versatile",
                 messages=[
                     {"role": "system", "content": "أنت مساعد للأطفال. لخّص النص في 3-4 جمل بسيطة بنفس لغة النص."},
                     {"role": "user", "content": text}
