@@ -1,26 +1,22 @@
 import streamlit as st
-import anthropic
- 
-st.title("SUMMARIZE")
-st.write("Enter the text!")
- 
-client = anthropic.Anthropic(api_key=st.secrets["ANTHROPIC_API_KEY"])
- 
+from groq import Groq
+
+st.title(" ملخصي")
+
+client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+
 text = st.text_area("اكتب النص هنا...", height=200)
- 
+
 if st.button(" لخّص!"):
     if len(text.split()) < 10:
         st.warning(" النص قصير جداً!")
     else:
-        with st.spinner(" جاري التلخيص..."):
-            response = client.messages.create(
-                model="claude-sonnet-4-20250514",
-                max_tokens=300,
+        with st.spinner("⏳ جاري التلخيص..."):
+            response = client.chat.completions.create(
+                model="llama3-8b-8192",
                 messages=[
-                    {
-                        "role": "user",
-                        "content": f"أنت مساعد للأطفال. لخّص هذا النص في 3-4 جمل بسيطة بنفس لغة النص:\n\n{text}"
-                    }
+                    {"role": "system", "content": "أنت مساعد للأطفال. لخّص النص في 3-4 جمل بسيطة بنفس لغة النص."},
+                    {"role": "user", "content": text}
                 ]
             )
-            st.success(response.content[0].text)
+            st.success(response.choices[0].message.content)
