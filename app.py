@@ -33,7 +33,7 @@ if st.button(" لخّص!"):
             response = client.chat.completions.create(
                 model="llama-3.3-70b-versatile",
                 messages=[
-                    {"role": "system", "content": f"You are a helpful assistant for kids. Summarize the text in 3-4 simple sentences. You MUST respond in {language} only."},
+                    {"role": "system","content": f"You are a helpful assistant for kids. Summarize the text in 3-4 simple sentences. You MUST respond in {language} only. Do NOT use any other language or characters."},
                     {"role": "user", "content": text}
                 ]
             )
